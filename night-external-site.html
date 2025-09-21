@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Night External</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Animated gradient background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, #000, #0a0a0a, #000);
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at center, rgba(255, 20, 147, 0.08) 0%, transparent 50%);
+            animation: floatGradient 25s ease-in-out infinite;
+            z-index: -1;
+        }
+
+        @keyframes floatGradient {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            33% { transform: translate(20%, 15%) scale(1.1); }
+            66% { transform: translate(-15%, 20%) scale(0.95); }
+        }
+
+        /* Ultra minimal navigation */
+        .navbar {
+            position: fixed;
+            top: 40px;
+            left: 40px;
+            z-index: 1000;
+            display: flex;
+            gap: 30px;
+        }
+
+        .nav-btn {
+            color: rgba(255, 255, 255, 0.5);
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 13px;
+            letter-spacing: 0.5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-btn::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background: #ff1493;
+            transition: width 0.3s ease;
+        }
+
+        .nav-btn:hover {
+            color: white;
+        }
+
+        .nav-btn:hover::after {
+            width: 100%;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: clamp(6rem, 16vw, 14rem);
+            font-weight: 100;
+            letter-spacing: -0.08em;
+            background: linear-gradient(90deg, #fff, #ff1493, #fff);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: shimmer 4s linear infinite;
+        }
+
+        @keyframes shimmer {
+            0%, 100% { background-position: 200% center; }
+            50% { background-position: -200% center; }
+        }
+
+        .section {
+            min-height: 100vh;
+            padding: 120px 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 4vw, 3rem);
+            font-weight: 200;
+            margin-bottom: 60px;
+            letter-spacing: -1px;
+            opacity: 0.9;
+        }
+
+        /* Minimal content boxes */
+        .content-box {
+            padding: 60px 40px;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .pricing-subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: #ff1493;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .pricing-description {
+            font-size: 15px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 50px;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .price-display {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 60px;
+            align-items: center;
+        }
+
+        .price-item {
+            font-size: 32px;
+            font-weight: 200;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .price-divider {
+            width: 1px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .robux-icon {
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 20, 147, 0.1);
+            border: 1px solid rgba(255, 20, 147, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: #ff1493;
+        }
+
+        /* Ultra minimal button */
+        .btn-minimal {
+            background: transparent;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: rgba(255, 255, 255, 0.8);
+            padding: 14px 50px;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            text-decoration: none;
+            display: inline-block;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-minimal::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: rgba(255, 20, 147, 0.1);
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+
+        .btn-minimal:hover {
+            color: white;
+            border-color: rgba(255, 20, 147, 0.5);
+        }
+
+        .btn-minimal:hover::before {
+            width: 100%;
+        }
+
+        .payment-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-bottom: 60px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .payment-item {
+            text-align: center;
+        }
+
+        .payment-item h3 {
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 20px;
+        }
+
+        .payment-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .payment-option {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 14px;
+            font-weight: 300;
+            transition: color 0.3s ease;
+            cursor: pointer;
+        }
+
+        .payment-option:hover {
+            color: #ff1493;
+        }
+
+        .info-text {
+            font-size: 16px;
+            line-height: 2;
+            color: rgba(255, 255, 255, 0.5);
+            max-width: 600px;
+            margin: 0 auto;
+            font-weight: 300;
+            letter-spacing: 0.3px;
+        }
+
+        .info-text strong {
+            color: rgba(255, 255, 255, 0.8);
+            font-weight: 400;
+        }
+
+        .form-minimal {
+            max-width: 380px;
+            margin: 0 auto;
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 10px;
+            color: rgba(255, 255, 255, 0.4);
+            font-weight: 300;
+            font-size: 12px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        .form-group input {
+            width: 100%;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 12px 0;
+            color: white;
+            font-size: 15px;
+            font-weight: 300;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-bottom-color: rgba(255, 20, 147, 0.5);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(255, 255, 255, 0.2);
+        }
+
+        .captcha-box {
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.3);
+            letter-spacing: 0.5px;
+        }
+
+        .login-btn {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .form-footer {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 13px;
+            font-weight: 300;
+        }
+
+        .form-footer a {
+            color: rgba(255, 20, 147, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .form-footer a:hover {
+            color: #ff1493;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .navbar {
+                top: 25px;
+                left: 25px;
+                gap: 20px;
+            }
+            
+            .nav-btn {
+                font-size: 12px;
+            }
+            
+            .section {
+                padding: 80px 25px;
+            }
+            
+            .content-box {
+                padding: 40px 20px;
+            }
+            
+            .price-display {
+                flex-direction: column;
+                gap: 25px;
+            }
+            
+            .price-divider {
+                width: 30px;
+                height: 1px;
+            }
+            
+            .payment-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .hero-title {
+                font-size: 5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .navbar {
+                flex-wrap: wrap;
+                gap: 15px;
+            }
+            
+            .hero-title {
+                font-size: 4rem;
+            }
+            
+            .btn-minimal {
+                padding: 12px 35px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#pricing" class="nav-btn">pricing</a>
+        <a href="#purchase" class="nav-btn">purchase</a>
+        <a href="#info" class="nav-btn">info</a>
+        <a href="#dashboard" class="nav-btn">dashboard</a>
+    </nav>
+
+    <section class="hero">
+        <h1 class="hero-title">night</h1>
+    </section>
+
+    <section id="pricing" class="section">
+        <div class="container">
+            <div class="content-box">
+                <h2 class="pricing-subtitle">lifetime</h2>
+                <p class="pricing-description">
+                    optimized external with premium features
+                </p>
+                <div class="price-display">
+                    <div class="price-item">
+                        €12
+                    </div>
+                    <div class="price-divider"></div>
+                    <div class="price-item">
+                        <div class="robux-icon">R$</div>
+                        2000
+                    </div>
+                </div>
+                <a href="#purchase" class="btn-minimal">purchase</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="purchase" class="section">
+        <div class="container">
+            <h2 class="section-title">purchase</h2>
+            <div class="content-box">
+                <div class="payment-grid">
+                    <div class="payment-item">
+                        <h3>crypto</h3>
+                        <div class="payment-options">
+                            <div class="payment-option">litecoin</div>
+                            <div class="payment-option">solana</div>
+                            <div class="payment-option">ethereum</div>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <h3>robux</h3>
+                        <div class="payment-options">
+                            <div class="payment-option">game pass</div>
+                            <div class="payment-option">group funds</div>
+                            <div class="payment-option">direct</div>
+                        </div>
+                    </div>
+                    <div class="payment-item">
+                        <h3>other</h3>
+                        <div class="payment-options">
+                            <div class="payment-option">paypal</div>
+                            <div class="payment-option">card</div>
+                            <div class="payment-option">cashapp</div>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-minimal">complete order</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="info" class="section">
+        <div class="container">
+            <h2 class="section-title">information</h2>
+            <div class="content-box">
+                <div class="info-text">
+                    <strong>night external</strong> is a lightweight, optimized solution designed for peak performance. 
+                    built with modern architecture and clean code, delivering consistent results with minimal overhead.
+                    <br><br>
+                    lifetime license includes all future updates, premium support, and access to exclusive features. 
+                    trusted by thousands for reliability and efficiency.
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="dashboard" class="section">
+        <div class="container">
+            <h2 class="section-title">dashboard</h2>
+            <div class="content-box">
+                <form class="form-minimal">
+                    <div class="form-group">
+                        <label for="username">username</label>
+                        <input type="text" id="username" name="username" placeholder="enter username" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="password">password</label>
+                        <input type="password" id="password" name="password" placeholder="enter password" required>
+                    </div>
+                    <div class="captcha-box">
+                        captcha verification required
+                    </div>
+                    <button type="submit" class="btn-minimal login-btn">sign in</button>
+                    <div class="form-footer">
+                        don't have an account? <a href="#">register</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+</body>
+</html>
